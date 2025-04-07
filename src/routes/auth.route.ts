@@ -8,10 +8,19 @@ import {
   sendPasswordResetEmailHandler,
   verifyEmailHandler,
 } from "../controllers/authController";
+import { rateLimit } from "express-rate-limit";
 
 const authRouter = Router();
 
-authRouter.post("/register", registerHandler);
+authRouter.post(
+  "/register",
+  rateLimit({
+    windowMs: 10 * 60 * 1000,
+    limit: 5,
+    message: "Too many registeration attempts, try again later",
+  }),
+  registerHandler
+);
 authRouter.post("/login", loginHandler);
 authRouter.get("/logout", logOutHandler);
 authRouter.get("/refresh", refreshHandler);
