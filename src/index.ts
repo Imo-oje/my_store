@@ -1,16 +1,22 @@
 import "dotenv/config";
 import express from "express";
 import { PORT } from "./constants/env";
-import authRouter from "./routes/auth.route";
+import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/errorHandler";
+import authRouter from "./routes/auth.route";
+import userRouter from "./routes/user.route";
+import { authenticate } from "./middleware/authenticate";
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
-app.set("trust proxy", true);
+app.set("trust proxy", 1 /* number of proxies between user and server */);
 
 //Routes
 app.use("/auth", authRouter);
+app.use("/user", authenticate, userRouter);
 
 app.use(errorHandler);
 

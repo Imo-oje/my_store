@@ -215,7 +215,7 @@ export const verifyEmailHandler = asyncHandler(async (req, res) => {
   });
   appAssert(verificationCode, NOT_FOUND, "Invalid or expired code");
 
-  const user = prisma.user.update({
+  const user = await prisma.user.update({
     where: { id: verificationCode.userId },
     data: { isVerified: true },
   });
@@ -232,7 +232,7 @@ export const sendPasswordResetEmailHandler = asyncHandler(async (req, res) => {
   const user = await prisma.user.findUnique({ where: { email } });
   appAssert(user, NOT_FOUND, "User not found");
 
-  // Handle toomany requests
+  // Handle too many requests
   const fiveMinAgo = fiveMinutesAgo();
   const count = await prisma.verificationCode.count({
     where: { createdAt: { gt: fiveMinAgo } },
