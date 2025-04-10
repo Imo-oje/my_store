@@ -21,6 +21,7 @@ model User {
   isVerified Boolean @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  role Role @default(USER)
   stores Store[]
   sessions Session[]
   verificationCode VerificationCode[]
@@ -28,10 +29,30 @@ model User {
 
 model Store {
   id String @id @default(uuid())
-  name String
+  businessName String
+  contactEmail String?
+  contactPhone String?
+  logo String?
+  description String?
+  address String?
+  location String?
   products Product[]
   owner User @relation(fields: [ownerId], references: [id])
+  reviews Review[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isVerified Boolean @default(false)
   ownerId String
+}
+
+model Review {
+  id String @id @default(uuid())
+  store Store @relation(fields: [storeId], references: [id])
+  storeId String
+  rating Int
+  comment String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Product {
@@ -66,4 +87,9 @@ model VerificationCode {
 enum VerificationCodeType {
   EMAIL_VERIFICATION
   PASSWORD_RESET
+}
+
+enum Role {
+  USER
+  ADMIN
 }

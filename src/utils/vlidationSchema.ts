@@ -27,3 +27,18 @@ export const passwordResetSchema = z.object({
   password: passwordSchema,
   verificationCode: verificatioCodeSchema,
 });
+
+export const createStoreSchema = z.object({
+  businessName: z.string().min(3, { message: "Name is too short" }),
+  logo: z.string().url().optional(),
+});
+
+export const updateStoreSchema = z.object({
+  businessName: z.string().min(3, { message: "Name is too short" }).optional(),
+  logo: z.string().url().optional(),
+  contactEmail: z.string().optional(),
+  contactPhone: z.string().optional(),
+  description: z.string().optional(),
+  address: z.string().optional(),
+  location: z.string().optional(),
+});

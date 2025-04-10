@@ -10,7 +10,16 @@ import appAssert from "../utils/appAssert";
 import { asyncHandler } from "../utils/asyncFunctionHandler";
 import { fiveMinutesAgo, tenMinutesFromNow } from "../utils/date";
 import { getPasswordResetTemplate } from "../utils/emailTemplate";
+import { omitPassword } from "../utils/prisma";
 import { sendMail } from "../utils/sendMail";
+
+export const getUserProfile = asyncHandler(async (req, res) => {
+  const userProfile = await prisma.user.findUnique({
+    where: { id: req.userId },
+  });
+  appAssert(userProfile, FORBIDDEN, "Invalid User");
+  res.status(OK).json(omitPassword(userProfile));
+});
 
 export const resendVerificationEmail = asyncHandler(async (req, res) => {
   const user = await prisma.user.findUnique({ where: { id: req.userId } });
