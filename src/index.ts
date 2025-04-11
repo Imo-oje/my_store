@@ -7,6 +7,7 @@ import authRouter from "./routes/auth.route";
 import userRouter from "./routes/user.route";
 import { authenticate } from "./middleware/authenticate";
 import storeRouter from "./routes/store.route";
+import productRouter from "./routes/product.route";
 
 const app = express();
 app.use(express.json());
@@ -16,9 +17,10 @@ app.use(express.urlencoded({ extended: true }));
 app.set("trust proxy", 1 /* number of proxies between user and server */);
 
 //Routes
-app.use("/auth", authRouter);
-app.use("/user", authenticate, userRouter);
-app.use("/store", authenticate, storeRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user", authenticate, userRouter);
+app.use("/api/v1/store", authenticate, storeRouter);
+app.use("/api/v1/product", productRouter);
 
 app.use(errorHandler);
 

@@ -42,3 +42,14 @@ export const updateStoreSchema = z.object({
   address: z.string().optional(),
   location: z.string().optional(),
 });
+
+export const createProductSchema = z.object({
+  name: z.string(),
+  description: z.string(),
+  price: z.number(),
+  images: z
+    .array(z.string().url())
+    .min(1, { message: "At least one image is required" }),
+  quantity: z.number(),
+});
+export const updateProductsSchema = createProductSchema.partial();
