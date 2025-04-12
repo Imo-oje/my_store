@@ -74,7 +74,7 @@ export const getCatalog = asyncHandler(async (req, res) => {
   const store = await prisma.store.findUnique({ where: { id: storeId } });
   appAssert(store, NOT_FOUND, "Store not found");
   const products = await prisma.product.findMany({
-    where: { storeId: store.id },
+    where: { storeId: store.id, isdeleted: false },
   });
   appAssert(products, NOT_FOUND, "Products not found");
   res.status(OK).json({ success: true, data: { store, products } });
@@ -101,7 +101,9 @@ export const getSingleProduct = asyncHandler(async (req, res) => {
   const user = await prisma.user.findUnique({ where: { id: req.userId } });
   appAssert(user, FORBIDDEN, "Invalid User");
 
-  const product = await prisma.product.findUnique({ where: { id: productId } });
+  const product = await prisma.product.findUnique({
+    where: { id: productId, isdeleted: false },
+  });
   appAssert(product, NOT_FOUND, "Product not found");
   res.status(OK).json({ success: true, date: product });
 });
@@ -109,7 +111,7 @@ export const getSingleProduct = asyncHandler(async (req, res) => {
 export const getAllProducts = asyncHandler(async (req, res) => {
   const { store } = await getUserAndStore(req.userId);
   const products = await prisma.product.findMany({
-    where: { storeId: store.id },
+    where: { storeId: store.id, isdeleted: false },
   });
   appAssert(products, NOT_FOUND, "No products found");
   res.status(OK).json({ success: true, data: products });

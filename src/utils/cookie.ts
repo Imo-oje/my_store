@@ -16,7 +16,7 @@ export const accessTokenCookieOptions = () => ({
 export const refreshTokenCookieOptions = () => ({
   ...defaults,
   expires: thirtyDaysFromNow(),
-  path: "/auth/refresh", //refresh tokens will be sent on this path
+  path: "/api/v1/auth/refresh", // Refresh tokens will be sent on this path
 });
 
 export const setAuthCookies = (

@@ -1,12 +1,7 @@
 import { Store, User } from "@prisma/client";
 import prisma from "../db/client";
-import {
-  FORBIDDEN,
-  INTERNAL_SERVER_ERROR,
-  NOT_FOUND,
-} from "../constants/HttpStatusCode";
+import { FORBIDDEN, NOT_FOUND } from "../constants/HttpStatusCode";
 import appAssert from "./appAssert";
-import { Request } from "express";
 
 export const omitPassword = ({ passwordHash, ...safeUser }: User) => safeUser;
 
