@@ -9,6 +9,7 @@ import { authenticate } from "./middleware/authenticate";
 import storeRouter from "./routes/store.route";
 import productRouter from "./routes/product.route";
 import morgan from "morgan";
+import adminRouter from "./routes/admin.route";
 
 const app = express();
 app.use(express.json());
@@ -23,6 +24,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", authenticate, userRouter);
 app.use("/api/v1/store", storeRouter);
 app.use("/api/v1/product", productRouter);
+app.use("/api/v1/admin", authenticate, adminRouter);
 
 app.use(errorHandler);
 

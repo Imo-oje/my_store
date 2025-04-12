@@ -3,6 +3,7 @@ import z from "zod";
 export const emailSchema = z.string().min(1).max(255);
 export const passwordSchema = z.string().min(6).max(255);
 export const verificatioCodeSchema = z.string().min(1).max(255);
+export const stringSchema = z.string().min(1).max(255);
 
 export const loginSchema = z.object({
   email: emailSchema,
@@ -53,3 +54,8 @@ export const createProductSchema = z.object({
   quantity: z.number(),
 });
 export const updateProductsSchema = createProductSchema.partial();
+
+export const createRoleSchema = z.object({
+  name: z.string(),
+  permissions: z.array(z.string()),
+});

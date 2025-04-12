@@ -52,6 +52,12 @@ export const registerHandler = asyncHandler(async (req, res) => {
   });
   appAssert(!existingUser, CONFLICT, "User Already Exists");
 
+  const defaultRole = await prisma.role.findUnique({
+    where: { name: "USER" },
+    select: { id: true },
+  });
+  appAssert(defaultRole, INTERNAL_SERVER_ERROR, "Could not determine role");
+
   // Hash password and create user
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = await prisma.user.create({
@@ -60,6 +66,7 @@ export const registerHandler = asyncHandler(async (req, res) => {
       firstName,
       lastName,
       passwordHash: hashedPassword,
+      roleId: defaultRole.id,
     },
   });
 
