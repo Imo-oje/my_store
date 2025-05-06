@@ -18,6 +18,14 @@ export const createPermissions = asyncHandler(async (req, res) => {
 
 export const createRoles = asyncHandler(async (req, res) => {
   const { name, permissions: permissionIds } = createRoleSchema.parse(req.body);
+
+  const roleExists = await prisma.role.findUnique({
+    where: {
+      name,
+    },
+  });
+  appAssert(!roleExists, INTERNAL_SERVER_ERROR, "Role already exists");
+
   const permissions = await prisma.permission.findMany({
     where: {
       id: { in: permissionIds },

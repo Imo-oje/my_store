@@ -116,7 +116,10 @@ export const loginHandler = asyncHandler(async (req, res) => {
   });
 
   // Validate password
-  const user = await prisma.user.findFirst({ where: { email } });
+  const user = await prisma.user.findFirst({
+    where: { email },
+    include: { role: true },
+  });
   appAssert(user, UNAUTHORIZED, "Invalid email or password");
   const isValid = await bcrypt.compare(password, user.passwordHash);
   appAssert(isValid, UNAUTHORIZED, "Invalid email or password");
@@ -139,8 +142,9 @@ export const loginHandler = asyncHandler(async (req, res) => {
   const accessToken = signToken({ userId: user.id, sessionId: session.id });
 
   // Set auth cookies
-  return setAuthCookies(accessToken, refreshToken, res).status(CREATED).json({
+  return setAuthCookies(accessToken, refreshToken, res).status(OK).json({
     message: "Login successful",
+    role: user.role.name,
   });
 });
 
@@ -253,7 +257,7 @@ export const sendPasswordResetEmailHandler = asyncHandler(async (req, res) => {
   });
 
   // Send verification email
-  const url = `${APP_ORIGIN}/password/reset?code=${
+  const url = `${APP_ORIGIN}/auth/reset-password?code=${
     verificationCode.id
   }&exp=${expiresAt.getTime()}`;
 

@@ -16,6 +16,13 @@ import { sendMail } from "../utils/sendMail";
 export const getUserProfile = asyncHandler(async (req, res) => {
   const userProfile = await prisma.user.findUnique({
     where: { id: req.userId },
+    include: {
+      role: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
   appAssert(userProfile, FORBIDDEN, "Invalid User");
   res.status(OK).json(omitPassword(userProfile));

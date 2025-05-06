@@ -3,7 +3,7 @@ import { fiftenMinutesFromNow, thirtyDaysFromNow } from "./date";
 import { NODE_ENV } from "../constants/env";
 
 const defaults: CookieOptions = {
-  sameSite: "none",
+  sameSite: NODE_ENV !== "production" ? "lax" : "none",
   httpOnly: true,
   secure: NODE_ENV === "production",
 };

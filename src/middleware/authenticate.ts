@@ -4,7 +4,7 @@ import appAssert from "../utils/appAssert";
 import { asyncHandler } from "../utils/asyncFunctionHandler";
 import { verifyToken } from "../utils/jwt";
 
-export const authenticate = asyncHandler(async (req, res, next) => {
+export const authenticate = asyncHandler(async (req, _res, next) => {
   const accessToken = req.cookies.accessToken;
   appAssert(
     accessToken,

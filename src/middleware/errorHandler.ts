@@ -4,11 +4,13 @@ import { ZodError } from "zod";
 import { INTERNAL_SERVER_ERROR } from "../constants/HttpStatusCode";
 
 export const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
-  console.log("UNHANDLED_ERROR: ", error);
+  console.log("ERROR: ", error);
 
   if (error instanceof AppError) {
-    res.status(error.statuscode).json({
-      message: error.message,
+    const { statuscode, message, errorCode } = error;
+    res.status(statuscode).json({
+      message,
+      errorCode,
     });
   }
 

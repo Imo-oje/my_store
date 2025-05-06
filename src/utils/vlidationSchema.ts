@@ -24,10 +24,16 @@ export const registerSchema = () =>
       path: ["confirmPassword"],
     });
 
-export const passwordResetSchema = z.object({
-  password: passwordSchema,
-  verificationCode: verificatioCodeSchema,
-});
+export const passwordResetSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: passwordSchema,
+    verificationCode: verificatioCodeSchema,
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 export const createStoreSchema = z.object({
   businessName: z.string().min(3, { message: "Name is too short" }),

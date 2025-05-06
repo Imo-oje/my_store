@@ -1,6 +1,6 @@
 import "dotenv/config";
 import express from "express";
-import { PORT } from "./constants/env";
+import { APP_ORIGIN, PORT } from "./constants/env";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/errorHandler";
 import authRouter from "./routes/auth.route";
@@ -10,8 +10,18 @@ import storeRouter from "./routes/store.route";
 import productRouter from "./routes/product.route";
 import morgan from "morgan";
 import adminRouter from "./routes/admin.route";
+import cors from "cors";
 
 const app = express();
+
+const corsOpstions = {
+  origin: APP_ORIGIN,
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+};
+
+app.use(cors(corsOpstions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
