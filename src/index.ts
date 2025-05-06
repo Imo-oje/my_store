@@ -14,14 +14,15 @@ import cors from "cors";
 
 const app = express();
 
-const corsOpstions = {
+const corsOptions = {
   origin: APP_ORIGIN,
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
 };
 
-app.use(cors(corsOpstions));
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
