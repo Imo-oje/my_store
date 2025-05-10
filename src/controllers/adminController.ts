@@ -1,9 +1,34 @@
-import { permission } from "process";
-import { CREATED, INTERNAL_SERVER_ERROR } from "../constants/HttpStatusCode";
+import {
+  CREATED,
+  INTERNAL_SERVER_ERROR,
+  OK,
+} from "../constants/HttpStatusCode";
 import prisma from "../db/client";
 import appAssert from "../utils/appAssert";
 import { asyncHandler } from "../utils/asyncFunctionHandler";
 import { createRoleSchema, stringSchema } from "../utils/vlidationSchema";
+
+export const getAdminProfile = asyncHandler(async (req, res) => {
+  const admin = await prisma.user.findUnique({
+    where: { id: req.params.adminId },
+  });
+  appAssert(admin, INTERNAL_SERVER_ERROR, "Admin not found");
+  res.status(OK).json(admin);
+});
+
+export const getAllAdmin = asyncHandler(async (req, res) => {
+  const admins = await prisma.user.findMany({
+    where: {
+      role: { name: "ADMIN" },
+    },
+  });
+  appAssert(
+    admins.length >= 0,
+    INTERNAL_SERVER_ERROR,
+    "Could not fetch admins"
+  );
+  res.status(OK).json(admins);
+});
 
 export const createPermissions = asyncHandler(async (req, res) => {
   const name = stringSchema.parse(req.body.name);
